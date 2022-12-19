@@ -6,6 +6,8 @@ import './styles.scss';
 const initialState = {
   firstName: '',
   lastName: '',
+  race: 'humain',
+  class: 'magicien',
 };
 
 const SET_FIELD = 'SET_FIELD';
@@ -36,18 +38,18 @@ function CharacterForm() {
   return (
     <div className="rpgui-container framed character-form">
       <header className="header">
-        <h1>Createur de personnage</h1>
-        <div className="btn-reset-container">
-          <button
-            type="button"
-            className="btn-reset"
-            onClick={() => dispatch(actionReset())}
-          >
-            Reinitialiser
-          </button>
-        </div>
-        <hr />
+        <h1 className="title">Createur de personnage</h1>
+        <hr className="golden" />
       </header>
+      <div className="btn-reset-container">
+        <button
+          type="button"
+          className="btn-reset rpgui-button"
+          onClick={() => dispatch(actionReset())}
+        >
+          Reinitialiser
+        </button>
+      </div>
       <form>
         <Grid>
           <Row>
@@ -77,7 +79,12 @@ function CharacterForm() {
           <Row>
             <Col xs={12} md={6}>
               <label htmlFor="race">Race:</label>
-              <select id="race" className="rpgui-dropdown">
+              <select
+                id="race"
+                className="rpgui-dropdown"
+                value={state.race}
+                onChange={(e) => dispatch(actionSetField('race', e.target.value))}
+              >
                 <option value="humain">Humain</option>
                 <option value="elfe">Elfe</option>
                 <option value="nain">Nain</option>
@@ -91,7 +98,12 @@ function CharacterForm() {
             </Col>
             <Col xs={12} md={6}>
               <label htmlFor="class">Classe:</label>
-              <select id="class" className="rpgui-dropdown">
+              <select
+                id="class"
+                className="rpgui-dropdown"
+                value={state.class}
+                onChange={(e) => dispatch(actionSetField('class', e.target.value))}
+              >
                 <option value="magicien">Magicien</option>
                 <option value="guerrier">Guerrier</option>
                 <option value="barde">Barde</option>
