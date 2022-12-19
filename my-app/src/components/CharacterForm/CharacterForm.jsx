@@ -8,20 +8,21 @@ const initialState = {
   lastName: '',
 };
 
-const SET_FIRSTNAME = 'SET_FIRSTNAME';
-const SET_LASTNAME = 'SET_LASTNAME';
+const SET_FIELD = 'SET_FIELD';
+const actionSetField = (name, value) => ({ type: SET_FIELD, payload: { name, value } });
+
+const RESET = 'RESET';
+const actionReset = () => ({ type: RESET });
 
 function reducer(state, action) {
   switch (action.type) {
-    case SET_FIRSTNAME:
+    case RESET: {
+      return initialState; // on reset le state au niveau initial
+    }
+    case SET_FIELD:
       return {
         ...state,
-        firstName: action.payload,
-      };
-    case SET_LASTNAME:
-      return {
-        ...state,
-        lastName: action.payload,
+        [action.payload.name]: action.payload.value,
       };
     default: {
       throw new Error('action not recognized');
@@ -34,8 +35,19 @@ function CharacterForm() {
 
   return (
     <div className="rpgui-container framed character-form">
-      <h1>Createur de personnage</h1>
-      <hr />
+      <header className="header">
+        <h1>Createur de personnage</h1>
+        <div className="btn-reset-container">
+          <button
+            type="button"
+            className="btn-reset"
+            onClick={() => dispatch(actionReset())}
+          >
+            Reinitialiser
+          </button>
+        </div>
+        <hr />
+      </header>
       <form>
         <Grid>
           <Row>
@@ -46,7 +58,7 @@ function CharacterForm() {
                   type="text"
                   placeholder="..."
                   value={state.lastName}
-                  onChange={(e) => dispatch({ type: SET_LASTNAME, payload: e.target.value })}
+                  onChange={(e) => dispatch(actionSetField('lastName', e.target.value))}
                 />
               </label>
             </Col>
@@ -57,7 +69,7 @@ function CharacterForm() {
                   placeholder="..."
                   type="text"
                   value={state.firstName}
-                  onChange={(e) => dispatch({ type: SET_FIRSTNAME, payload: e.target.value })}
+                  onChange={(e) => dispatch(actionSetField('firstName', e.target.value))}
                 />
               </label>
             </Col>
