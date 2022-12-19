@@ -1,0 +1,7 @@
+@use "/src/styles/vars";
+
+.App {
+  padding: vars.$gutter * 2 0;
+  display: flex;
+  justify-content: center;
+}
