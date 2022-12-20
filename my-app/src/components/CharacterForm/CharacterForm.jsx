@@ -1,56 +1,77 @@
-import React, { useReducer } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+import Undo from 'pixelarticons/svg/undo.svg';
+import Redo from 'pixelarticons/svg/redo.svg';
+
+import DropdownRpg from '../DropdownRpg/DropdownRpg';
+import RadiosButtonsRpg from '../RadiosButtonRpg/RadiosButtonsRpg';
+import useCharacterReducer, {
+  actionReset, actionSetField, actionRandom, actionRedo, actionUndo, actionResetHistory,
+} from '../../hooks/useCharacterReducer';
+
+import classes from '../../data/classes';
+import races from '../../data/races';
 
 import './styles.scss';
+import gender from '../../data/gender';
 
-const initialState = {
-  firstName: '',
-  lastName: '',
-  race: 'humain',
-  class: 'magicien',
-};
+function CharacterForm({
+  onCreateCharacter,
+}) {
+  const [state, dispatch, { undoEnabled, redoEnabled }] = useCharacterReducer();
 
-const SET_FIELD = 'SET_FIELD';
-const actionSetField = (name, value) => ({ type: SET_FIELD, payload: { name, value } });
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onCreateCharacter(state);
 
-const RESET = 'RESET';
-const actionReset = () => ({ type: RESET });
-
-function reducer(state, action) {
-  switch (action.type) {
-    case RESET: {
-      return initialState; // on reset le state au niveau initial
-    }
-    case SET_FIELD:
-      return {
-        ...state,
-        [action.payload.name]: action.payload.value,
-      };
-    default: {
-      throw new Error('action not recognized');
-    }
-  }
-}
-
-function CharacterForm() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+    dispatch(actionReset());
+    dispatch(actionResetHistory());
+  };
 
   return (
     <div className="rpgui-container framed character-form">
       <header className="header">
+        <div className="undo-redo-container">
+          {undoEnabled && (
+            <button
+              type="button"
+              className="btn-undo"
+              onClick={() => dispatch(actionUndo())}
+            >
+              <img src={Undo} alt="undo" />
+            </button>
+          )}
+          {redoEnabled && (
+            <button
+              type="button"
+              className="btn-redo"
+              onClick={() => dispatch(actionRedo())}
+            >
+              <img src={Redo} alt="redo" />
+            </button>
+          )}
+        </div>
         <h1 className="title">Createur de personnage</h1>
         <hr className="golden" />
       </header>
-      <div className="btn-reset-container">
+      <div className="btn-container">
         <button
           type="button"
-          className="btn-reset rpgui-button"
+          className="rpgui-button"
+          onClick={() => dispatch(actionRandom())}
+        >
+          <p>Aléatoire</p>
+        </button>
+        <button
+          type="button"
+          className="rpgui-button"
           onClick={() => dispatch(actionReset())}
         >
-          Reinitialiser
+          <p>Reinitialiser</p>
         </button>
       </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <Grid>
           <Row>
             <Col xs={12} md={6}>
@@ -58,7 +79,7 @@ function CharacterForm() {
                 Nom de famille:
                 <input
                   type="text"
-                  placeholder="..."
+                  placeholder="Baldur..."
                   value={state.lastName}
                   onChange={(e) => dispatch(actionSetField('lastName', e.target.value))}
                 />
@@ -68,7 +89,7 @@ function CharacterForm() {
               <label>
                 Prénom:
                 <input
-                  placeholder="..."
+                  placeholder="Minsc..."
                   type="text"
                   value={state.firstName}
                   onChange={(e) => dispatch(actionSetField('firstName', e.target.value))}
@@ -78,50 +99,71 @@ function CharacterForm() {
           </Row>
           <Row>
             <Col xs={12} md={6}>
-              <label htmlFor="race">Race:</label>
-              <select
-                id="race"
-                className="rpgui-dropdown"
+              <DropdownRpg
+                label="Race:"
                 value={state.race}
-                onChange={(e) => dispatch(actionSetField('race', e.target.value))}
-              >
-                <option value="humain">Humain</option>
-                <option value="elfe">Elfe</option>
-                <option value="nain">Nain</option>
-                <option value="orc">Orc</option>
-                <option value="gobelin">Gobelin</option>
-                <option value="tauren">Tauren</option>
-                <option value="gnome">Gnome</option>
-                <option value="harpie">Harpie</option>
-                <option value="centaure">Centaure</option>
-              </select>
+                onChange={(value) => dispatch(actionSetField('race', value))}
+                options={races}
+              />
             </Col>
             <Col xs={12} md={6}>
-              <label htmlFor="class">Classe:</label>
-              <select
-                id="class"
-                className="rpgui-dropdown"
-                value={state.class}
-                onChange={(e) => dispatch(actionSetField('class', e.target.value))}
-              >
-                <option value="magicien">Magicien</option>
-                <option value="guerrier">Guerrier</option>
-                <option value="barde">Barde</option>
-                <option value="inquisiteur">Inquisiteur</option>
-                <option value="voleur">Voleur</option>
-                <option value="druide">Druide</option>
-                <option value="archer">Archer</option>
-                <option value="paladin">Paladin</option>
-                <option value="assassin">Assassin</option>
-              </select>
+              <DropdownRpg
+                label="Classe:"
+                value={state.classes}
+                onChange={(value) => dispatch(actionSetField('classes', value))}
+                options={classes}
+              />
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} md={6} className="gender-container">
+              <RadiosButtonsRpg
+                label="Genre:"
+                value={state.gender}
+                onChange={(value) => dispatch(actionSetField('gender', value))}
+                options={gender}
+              />
+            </Col>
+            <Col xs={12} md={6}>
+              <label>
+                Argent
+                <input
+                  type="number"
+                  value={state.money}
+                  onChange={(e) => dispatch(actionSetField('money', Number(e.target.value)))}
+                />
+              </label>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <label>
+                Biographie:
+                <textarea
+                  rows={5}
+                  placeholder="il était une fois..."
+                  value={state.biography}
+                  onChange={(e) => dispatch(actionSetField('biography', e.target.value))}
+                />
+              </label>
             </Col>
           </Row>
         </Grid>
+        <div className="submit-button-container">
+          <button
+            type="submit"
+            className="rpgui-button golden"
+          >
+            <p>Créer</p>
+          </button>
+        </div>
       </form>
     </div>
   );
 }
-CharacterForm.propTypes = {};
+CharacterForm.propTypes = {
+  onCreateCharacter: PropTypes.func.isRequired,
+};
 
 CharacterForm.defaultProps = {};
 

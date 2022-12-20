@@ -1,21 +1,5 @@
-@use "/src/styles/vars";
-.character-form {
-    width: 60%;
-    min-width: 300px;
-    max-width: 800px;
-    min-height: 500px;
+@use "/src/styles/mixins";
 
-    .row {
-        padding-top: vars.$gutter;
-    }
-
-    .header {
-        .title {
-            font-size: 2em;
-        }
-    }
-    .btn-reset-container {
-        display: flex;
-        justify-content: flex-end;
-    }
+.petForm {
+    @include mixins.form-container;
 }
