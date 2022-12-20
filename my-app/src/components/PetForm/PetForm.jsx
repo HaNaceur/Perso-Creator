@@ -33,6 +33,8 @@ function PetForm() {
   return (
     <div className="rpgui-container framed petForm">
       <form>
+      <h1 className="title">Createur de famillier</h1>
+        <hr className="golden" />
         <Grid>
           <Row>
             <Col xs={12} md={6}>
@@ -56,6 +58,14 @@ function PetForm() {
             </Col>
           </Row>
         </Grid>
+        <div className="submit-button-container">
+          <button
+            type="submit"
+            className="rpgui-button golden"
+          >
+            <p>Créer</p>
+          </button>
+        </div>
       </form>
     </div>
   );
