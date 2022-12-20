@@ -1,0 +1,10 @@
+@use "/src/styles/mixins";
+@use "/src/styles/vars";
+
+.characters-list {
+    @include mixins.list-container;
+    display: flex;
+    flex-direction: column;
+    gap: vars.$gutter;
+    
+}

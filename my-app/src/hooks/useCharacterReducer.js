@@ -1,11 +1,11 @@
-import { useReducer } from 'react';
 import classes from '../data/classes';
 import gender from '../data/gender';
 import races from '../data/races';
 import { getRandomItem, getRandomNumber } from '../tools/random';
-import { getUndofiedInitialState, getUndofiedReducer } from '../tools/undofiedReducer';
 
-export { actionUndo, actionRedo } from '../tools/undofiedReducer';
+import useUndoReducer from './useUndoReducer';
+
+export { actionUndo, actionRedo, actionResetHistory } from './useUndoReducer';
 
 export const SET_FIELD = 'SET_FIELD';
 export const actionSetField = (name, value) => ({ type: SET_FIELD, payload: { name, value } });
@@ -58,12 +58,10 @@ function characterReducer(state, action) {
   }
 }
 
-const reducer = getUndofiedReducer(characterReducer);
-const initialState = getUndofiedInitialState(characterInitialState);
 function useCharacterReducer() {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch, undoOptions] = useUndoReducer(characterReducer, characterInitialState);
 
-  return [state, dispatch];
+  return [state, dispatch, undoOptions];
 }
 
 export default useCharacterReducer;

@@ -40,8 +40,8 @@
         display: flex;
         justify-content: flex-start;
     }
-    .submit-button-container{
-        padding: vars.$gutter;
+    .submit-button-container {
+        padding: 0 vars.$gutter;
         display: flex;
         justify-content: flex-end;
     }

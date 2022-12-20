@@ -7,6 +7,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "flexbox-grid": "^1.0.0",
+    "pixelarticons": "^1.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-flexbox-grid": "^2.1.2",
