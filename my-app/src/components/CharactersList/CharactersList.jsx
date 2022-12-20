@@ -1,14 +1,16 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+
+import React, { useContext } from 'react';
+import CharacterContext from '../../contexts/CharactersContext';
 
 import './styles.scss';
 
-function CharacterList({
-  characters,
-}) {
+function CharactersList() {
+  const contextValue = useContext(CharacterContext);
+  console.log(contextValue);
+
   return (
-    <div>
-      {characters.map(({ id, lastName, firstName }) => (
+    <div className="characters-list">
+      {contextValue.characters.map(({ id, lastName, firstName }) => (
         <div
           key={id}
           className="rpgui-container framed-golden"
@@ -19,14 +21,8 @@ function CharacterList({
     </div>
   );
 }
-CharacterList.propTypes = {
-  characters: PropTypes.arrayOf(PropTypes.shape({
-    id: PropTypes.string.isRequired,
-    firstName: PropTypes.string.isRequired,
-    lastName: PropTypes.string,
-  })).isRequired,
-};
+CharactersList.propTypes = {};
 
-CharacterList.defaultProps = {};
+CharactersList.defaultProps = {};
 
-export default React.memo(CharacterList);
+export default React.memo(CharactersList);
