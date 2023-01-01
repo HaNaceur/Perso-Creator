@@ -1,10 +1,10 @@
 export default [
-    { value: 'cat', label: 'Chat' },
-    { value: 'dog', label: 'Chien' },
-    { value: 'wolf', label: 'Loup' },
+    { value: 'cat', label: 'Cat' },
+    { value: 'dog', label: 'Dog' },
+    { value: 'wolf', label: 'Wolf' },
     { value: 'dragon', label: 'Dragon' },
-    { value: 'snake', label: 'Serpent' },
-    { value: 'owl', label: 'Chouette' },
+    { value: 'snake', label: 'Snake' },
+    { value: 'owl', label: 'Owl' },
     { value: 'lion', label: 'Lion' },
-    { value: 'goat', label: 'Chèvre' },
+    { value: 'goat', label: 'Goat' },
   ];

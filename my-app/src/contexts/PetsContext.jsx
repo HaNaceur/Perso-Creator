@@ -14,7 +14,7 @@ export function PetContextProvider({ children }) {
   const [pets, setPets] = useState([]);
 
   const addPet = useCallback((character) => {
-    setPets((olPets) => [
+    setPets((oldPets) => [
       ...oldPets,
       {
         ...character,

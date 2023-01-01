@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+
+import React, { useContext } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
 import Undo from 'pixelarticons/svg/undo.svg';
 import Redo from 'pixelarticons/svg/redo.svg';
 
 import DropdownRpg from '../DropdownRpg/DropdownRpg';
-import RadiosButtonsRpg from '../RadiosButtonRpg/RadiosButtonsRpg';
+import RadiosButtonsRpg from '../RadiosButtonsRpg/RadiosButtonsRpg';
 import useCharacterReducer, {
   actionReset, actionSetField, actionRandom, actionRedo, actionUndo, actionResetHistory,
 } from '../../hooks/useCharacterReducer';
@@ -15,15 +15,15 @@ import races from '../../data/races';
 
 import './styles.scss';
 import gender from '../../data/gender';
+import CharacterContext from '../../contexts/CharactersContext';
 
-function CharacterForm({
-  onCreateCharacter,
-}) {
+function CharacterForm() {
+  const contextValue = useContext(CharacterContext);
   const [state, dispatch, { undoEnabled, redoEnabled }] = useCharacterReducer();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onCreateCharacter(state);
+    contextValue.addCharacter(state);
 
     dispatch(actionReset());
     dispatch(actionResetHistory());
@@ -52,7 +52,7 @@ function CharacterForm({
             </button>
           )}
         </div>
-        <h1 className="title">Createur de personnage</h1>
+        <h1 className="title">Character creator</h1>
         <hr className="golden" />
       </header>
       <div className="btn-container">
@@ -61,14 +61,14 @@ function CharacterForm({
           className="rpgui-button"
           onClick={() => dispatch(actionRandom())}
         >
-          <p>Aléatoire</p>
+          <p>Random</p>
         </button>
         <button
           type="button"
           className="rpgui-button"
           onClick={() => dispatch(actionReset())}
         >
-          <p>Reinitialiser</p>
+          <p>Reset</p>
         </button>
       </div>
       <form onSubmit={handleSubmit}>
@@ -76,7 +76,7 @@ function CharacterForm({
           <Row>
             <Col xs={12} md={6}>
               <label>
-                Nom de famille:
+                LastName:
                 <input
                   type="text"
                   placeholder="Baldur..."
@@ -87,7 +87,7 @@ function CharacterForm({
             </Col>
             <Col xs={12} md={6}>
               <label>
-                Prénom:
+                Name:
                 <input
                   placeholder="Minsc..."
                   type="text"
@@ -118,7 +118,7 @@ function CharacterForm({
           <Row>
             <Col xs={12} md={6} className="gender-container">
               <RadiosButtonsRpg
-                label="Genre:"
+                label="Gender:"
                 value={state.gender}
                 onChange={(value) => dispatch(actionSetField('gender', value))}
                 options={gender}
@@ -126,7 +126,7 @@ function CharacterForm({
             </Col>
             <Col xs={12} md={6}>
               <label>
-                Argent
+                Money
                 <input
                   type="number"
                   value={state.money}
@@ -138,10 +138,10 @@ function CharacterForm({
           <Row>
             <Col xs={12}>
               <label>
-                Biographie:
+                Biography:
                 <textarea
                   rows={5}
-                  placeholder="il était une fois..."
+                  placeholder="Once upon a time..."
                   value={state.biography}
                   onChange={(e) => dispatch(actionSetField('biography', e.target.value))}
                 />
@@ -154,7 +154,7 @@ function CharacterForm({
             type="submit"
             className="rpgui-button golden"
           >
-            <p>Créer</p>
+            <p>Create</p>
           </button>
         </div>
       </form>
@@ -162,7 +162,6 @@ function CharacterForm({
   );
 }
 CharacterForm.propTypes = {
-  onCreateCharacter: PropTypes.func.isRequired,
 };
 
 CharacterForm.defaultProps = {};

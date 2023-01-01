@@ -1,5 +1,5 @@
 export default [
-    { value: 'woman', label: 'Femme' },
-    { value: 'men', label: 'Homme' },
+    { value: 'woman', label: 'Woman' },
+    { value: 'men', label: 'Man' },
   ];
   

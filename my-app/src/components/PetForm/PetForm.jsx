@@ -1,8 +1,14 @@
 import React, { useReducer } from 'react';
 import { Grid, Row, Col } from 'react-flexbox-grid';
+
 import DropdownRpg from '../DropdownRpg/DropdownRpg';
+import RadiosButtonsRpg from '../RadiosButtonsRpg/RadiosButtonsRpg';
+import usePetReducer, {
+    actionReset, actionSetField, actionRandom, actionRedo, actionUndo, actionResetHistory,
+  } from '../../hooks/usePetReducer';
 
 import pets from '../../data/pets';
+import PetContext from '../../contexts/CharactersContext';
 
 import './styles.scss';
 
@@ -12,7 +18,7 @@ const initialState = {
 };
 
 const SET_FIELD = 'SET_FIELD';
-const actionSetField = (name, value) => ({ type: SET_FIELD, payload: { name, value } });
+ actionSetField();
 
 function reducer(state, action) {
   switch (action.type) {
@@ -33,13 +39,11 @@ function PetForm() {
   return (
     <div className="rpgui-container framed petForm">
       <form>
-      <h1 className="title">Createur de famillier</h1>
-        <hr className="golden" />
         <Grid>
           <Row>
             <Col xs={12} md={6}>
               <label>
-                Prénom:
+                Name:
                 <input
                   placeholder="Hedwige..."
                   type="text"
@@ -58,18 +62,11 @@ function PetForm() {
             </Col>
           </Row>
         </Grid>
-        <div className="submit-button-container">
-          <button
-            type="submit"
-            className="rpgui-button golden"
-          >
-            <p>Créer</p>
-          </button>
-        </div>
       </form>
     </div>
   );
 }
+
 PetForm.propTypes = {};
 
 PetForm.defaultProps = {};
